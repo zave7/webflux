@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    active: dev
+  jpa:
+    show-sql: true
+  main:
+    allow-bean-definition-overriding: true # Spring Boot 2.1 버전에서 기본값이 false (실수로 bean을 재정의하게 되는 것을 방지)
