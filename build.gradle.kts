@@ -12,6 +12,13 @@ group = "com.practice"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
+// archive 파일 이름 변경
+tasks {
+	bootJar {
+		archiveFileName.set("webflux.jar")
+	}
+}
+
 repositories {
 	mavenCentral()
 }
