@@ -5,15 +5,15 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "todos")
-class Todo {
+data class Todo(
+    @Lob
+    @Column(name = "content")
+    var content : String? = null
+) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id : Long = 0
-
-    @Lob
-    @Column(name = "content")
-    var content : String? = null
 
     @Column(name = "done")
     var done : Boolean = false
@@ -23,4 +23,8 @@ class Todo {
 
     @Column
     var modifiedAt : LocalDateTime = createdAt
+    override fun toString(): String {
+        return "Todo(content=$content, id=$id, done=$done, createdAt=$createdAt, modifiedAt=$modifiedAt)"
+    }
+
 }

@@ -19,6 +19,15 @@ class TodoHandler(private val repo : TodoRepository) {
         .body<List<Todo>>(Mono.just(repo.findAll()))
         .switchIfEmpty(ServerResponse.notFound().build())
 
+    fun getAllLimitFive(req : ServerRequest) : Mono<ServerResponse> = ServerResponse.ok()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body<TodoList>(Mono.just(
+            TodoList(
+                repo.findAll()
+                .sortedByDescending { it.id }
+                .subList(0, req.pathVariable("limit").toInt()))))
+        .switchIfEmpty(ServerResponse.notFound().build())
+
     fun getById(req : ServerRequest) : Mono<ServerResponse> = ServerResponse.ok()
         .contentType(MediaType.APPLICATION_JSON)
         .body<Todo>(Mono.justOrEmpty(repo.findById(req.pathVariable("id").toLong())))
@@ -31,7 +40,7 @@ class TodoHandler(private val repo : TodoRepository) {
             .flatMap {
                 todo ->
                 Mono.fromCallable {
-                    println(todo)
+                    println(todo.toString())
                     repo.save(todo)
                 }.then(Mono.just(todo))
             }
@@ -63,3 +72,4 @@ class TodoHandler(private val repo : TodoRepository) {
             }
         ).switchIfEmpty(ServerResponse.notFound().build())
 }
+data class TodoList(val list : List<Todo>)
